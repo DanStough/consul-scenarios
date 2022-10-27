@@ -5,8 +5,6 @@ set -euo pipefail
 rm -rf /tmp/consul-dc1
 rm -rf /tmp/consul-dc2
 
-NETWORK_INTERFACE="en0"
-
 echo "Starting Consul"
 consul agent -dev -log-level=trace -config-file config_dc1.hcl 1>./logs/dc1.log &
 consul agent -dev -log-level=trace -config-file config_dc2.hcl 1>./logs/dc2.log &
@@ -17,7 +15,7 @@ sleep 10
 
 # echo "Starting gateways"
 consul connect envoy -gateway mesh -expose-servers -register -- -l critical &
-curl --request POST --data '{"PeerName":"cluster-02"}' --url http://localhost:8500/v1/peering/token > before_peering_token.json
+curl --request POST --data '{"PeerName":"cluster-02", "Meta": {"env": "production"}}' --url http://localhost:8500/v1/peering/token > before_peering_token.json
 jq --arg PeerName cluster-01 '.PeerName = $PeerName' before_peering_token.json > peering_token.json
 curl --request POST --data @peering_token.json http://127.0.0.1:9500/v1/peering/establish
 consul config write peering-config.hcl
@@ -32,6 +30,4 @@ CONSUL_HTTP_ADDR=localhost:9500 consul connect envoy -sidecar-for static-client 
 consul connect envoy -sidecar-for static-server -address '{{ GetInterfaceIP "$NETWORK_INTERFACE" }}:8446' -admin-bind localhost:19005 -- -l critical &
 
 # Cleanup
-# pkill node
-# pkill consul
-# pkill envoy
+# pkill node consul envoy

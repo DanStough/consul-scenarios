@@ -1,5 +1,10 @@
 # Consul Testing Scenarios
 
+## Contributors
+* @erichaberkorn
+* @DanStough
+* @jessingrass
+
 ## Prequisites
 
 * On Mac, have Consul and Envoy installed via Homebrew
