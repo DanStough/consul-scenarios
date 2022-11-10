@@ -9,7 +9,7 @@ service {
     upstreams {
       local_bind_port = 1234
       destination_name = "static-server"
-      destination_peer = "cluster-01"
+      destination_peer = "dialing-dc1"
     }
   }
 }

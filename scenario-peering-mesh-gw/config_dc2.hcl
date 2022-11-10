@@ -5,6 +5,7 @@ ports {
   serf_wan = 9401
   server = 9300
   grpc = 9502
+  grpc_tls = 9503
 }
 server = true
 bootstrap = true

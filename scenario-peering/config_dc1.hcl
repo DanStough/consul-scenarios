@@ -1,5 +1,7 @@
 ports {
   https = 8501
+  grpc = 8502
+  grpc_tls = 8503
 }
 bind_addr = "127.0.0.1"
 bootstrap = true

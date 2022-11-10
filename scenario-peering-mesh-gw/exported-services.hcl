@@ -6,7 +6,7 @@ Services = [
     Name      = "static-server"
     Consumers = [
       {
-        PeerName = "cluster-02"
+        Peer = "accepting-dc2"
       }
     ]
   }

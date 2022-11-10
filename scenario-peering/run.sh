@@ -13,12 +13,13 @@ http-echo-server 3005 &
 echo "Sleeping for 10 seconds"
 sleep 10
 
-# echo "Starting gateways"
+echo "Starting gateways for dataplane traffic"
 consul connect envoy -gateway mesh -expose-servers -register -- -l critical &
-curl --request POST --data '{"PeerName":"cluster-02", "Meta": {"env": "production"}}' --url http://localhost:8500/v1/peering/token > before_peering_token.json
-jq --arg PeerName cluster-01 '.PeerName = $PeerName' before_peering_token.json > peering_token.json
-curl --request POST --data @peering_token.json http://127.0.0.1:9500/v1/peering/establish
-consul config write peering-config.hcl
+
+echo "Establishing Peering"
+consul peering generate-token -name cluster-02 > before_peering_token.txt
+CONSUL_HTTP_ADDR=localhost:9500 consul peering establish -name cluster-01 -peering-token "$(cat before_peering_token.txt)"
+consul config write exported-services.hcl
 
 CONSUL_HTTP_ADDR=localhost:9500 consul services register static-client.hcl
 CONSUL_HTTP_ADDR=localhost:9500 consul services register static-client-sidecar-proxy.hcl
