@@ -3,23 +3,18 @@ ports {
   http = 9500
   serf_lan = 9301
   serf_wan = 9401
-  server = 9300
   grpc = 9502
   grpc_tls = 9503
 }
-server = true
-bootstrap = true
-data_dir = "/tmp/consul-dc2"
+retry_join = ["localhost:8301"]
+partition = "foo"
+data_dir = "/tmp/consul-dc1-client"
 bind_addr = "127.0.0.1"
-datacenter = "dc2"
-node_name = "secondary"
+datacenter = "dc1"
+node_name = "client"
 ui_config {
   enabled = true
 }
 connect {
-  enabled = true
-}
-
-peering {
   enabled = true
 }

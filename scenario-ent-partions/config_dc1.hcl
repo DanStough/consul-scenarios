@@ -15,7 +15,6 @@ ui_config {
 connect {
   enabled = true
 }
-
 peering {
   enabled = true
 }

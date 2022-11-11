@@ -14,6 +14,7 @@ connect {
 
 // We need to figure out if this is the right syntax or we're missing anything
 mdns {
+    enabled = true
     port = 8853
     domain = "local"
     service = "consul"
