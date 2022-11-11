@@ -4,6 +4,7 @@ set -euo pipefail
 
 rm -rf /tmp/consul-dc1
 rm -rf /tmp/consul-dc1-seconday
+rm -rf /tmp/consul-dc1-third
 rm -rf /tmp/consul-dc2
 
 echo "Starting Consul"
