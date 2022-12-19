@@ -6,3 +6,6 @@ This change will not affect Envoy admin access logs, which can only be configure
 
 To start:
 1. `./run.sh`
+1. Modify `proxy-defaults.hcl` to customize the log format.
+1. `consul config write proxy-defaults.hcl`
+1. Repeat!

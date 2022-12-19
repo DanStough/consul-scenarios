@@ -5,14 +5,20 @@
 * @DanStough
 * @jessingrass
 
-## Prequisites
+These scenarios are divided into 3 categories of target environment:
+1. **Local** - to be run on a single workstation
+2. **Kubernetes** - to be run on a Kubernetes cluster
+3. **VMs** - to be run in separate VMs
+
+## Local
+### Prequisites
 
 * On Mac, have Consul and Envoy installed via Homebrew
 * On Linux, install Consul and Envoy via the package manager. Envoy won't work for `ARM64`
 
 See `install-server.sh`.
 
-## Basic
+### Basic
 
 Run dev agent (both server and client)
 ```bash

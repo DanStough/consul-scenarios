@@ -21,8 +21,8 @@ consul services register static-server.hcl
 consul services register static-server-sidecar-proxy.hcl
 
 # Admin access logs are configured at startup
-consul connect envoy -sidecar-for static-client -address '{{ GetInterfaceIP "$NETWORK_INTERFACE" }}:19001' -admin-bind localhost:19004 -- -l critical 1> ./logs/client-sidecar.logs &
-consul connect envoy -sidecar-for static-server -address '{{ GetInterfaceIP "$NETWORK_INTERFACE" }}:8446' -admin-bind localhost:19005 -- -l critical 1> ./logs/server-sidecar.logs &
+consul connect envoy -sidecar-for static-client -address '{{ GetInterfaceIP "$NETWORK_INTERFACE" }}:19001' -admin-bind localhost:19004 -- -l critical 1> ./logs/client-sidecar-stdout.logs 2> ./logs/client-sidecar-stderr.logs &
+consul connect envoy -sidecar-for static-server -address '{{ GetInterfaceIP "$NETWORK_INTERFACE" }}:8446' -admin-bind localhost:19005 -- -l critical 1> ./logs/server-sidecar-stdout.logs 2> ./logs/server-sidecar-stderr.logs &
 
 # Cleanup
 # pkill node consul envoy

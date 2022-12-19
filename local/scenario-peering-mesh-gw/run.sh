@@ -8,15 +8,15 @@ rm -rf /tmp/consul-dc1-third
 rm -rf /tmp/consul-dc2
 
 echo "Starting Consul"
-consul agent -log-level trace -config-file config_dc1.hcl 1>./logs/dc1.log &
-consul agent -dev -log-level trace -config-file config_dc2.hcl 1>./logs/dc2.log &
+consul agent -dev -log-level info -config-file config_dc1.hcl 1>./logs/dc1.log &
+consul agent -dev -log-level info -config-file config_dc2.hcl 1>./logs/dc2.log &
 
 echo "Sleeping for 10 seconds"
 sleep 30
 
 echo "Starting Gateways"
-consul connect envoy -gateway mesh -service dc1-mesh-gateway -address "{{ GetInterfaceIP \"lo0\" }}:8443" -grpc-addr localhost:8502 -admin-bind 0.0.0.0:19004 -register -- --log-level info --log-path ./logs/dc1_meshgw_logs.txt 1>./logs/dc1-consul-sidecar.log &
-CONSUL_HTTP_ADDR=localhost:9500 consul connect envoy -gateway mesh -service dc2-mesh-gateway -address "{{ GetInterfaceIP \"lo0\" }}:9443" -grpc-addr localhost:9502 -admin-bind 0.0.0.0:19005 -register -- --log-level info --log-path ./logs/dc2_meshgw_logs.txt 1>./logs/dc2-consul-sidecar.log  &
+consul connect envoy -gateway mesh -service dc1-mesh-gateway -address "{{ GetInterfaceIP \"lo0\" }}:8443" -grpc-addr localhost:8502 -admin-bind 0.0.0.0:19004 -register -- --log-level debug --log-path ./logs/dc1_meshgw_logs.txt 1>./logs/dc1-consul-sidecar.log &
+CONSUL_HTTP_ADDR=localhost:9500 consul connect envoy -gateway mesh -service dc2-mesh-gateway -address "{{ GetInterfaceIP \"lo0\" }}:9443" -grpc-addr localhost:9502 -admin-bind 0.0.0.0:19005 -register -- --log-level debug --log-path ./logs/dc2_meshgw_logs.txt 1>./logs/dc2-consul-sidecar.log  &
 echo "waiting for gateways to start..."
 sleep 5
 
