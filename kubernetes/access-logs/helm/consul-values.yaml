@@ -1,0 +1,35 @@
+global:
+  image: ttl.sh/dans/consul-dev-access-logs:24h
+  imageK8S: ttl.sh/dans/consul-k8s-dev-access-logs:24h
+  name: consul
+  datacenter: dc1
+server:
+  enabled: true
+  replicas: 1
+ui:
+  enabled: true
+  port:
+    http: 80
+    https: 443
+  service:
+    type: ClusterIP
+connectInject:
+  enabled: true
+  default: true
+  transparentProxy:
+    defaultEnabled: true
+  # envoyExtraArgs: "--log-level trace"
+apiGateway:
+  enabled: true
+  image: "hashicorp/consul-api-gateway:0.5.1"
+  logLevel: "debug"
+  managedGatewayClass:
+    serviceType: NodePort
+    useHostPorts: true
+# # The following Node selectors are hack to make sure we bind the right container to the host.
+# # You'll need to do something different here for KIND.
+#     nodeSelector: |
+#       kubernetes.io/hostname: k3d-access-logs-testing-agent-0
+#   controller:
+#     nodeSelector: |
+#       kubernetes.io/hostname: k3d-access-logs-testing-agent-0

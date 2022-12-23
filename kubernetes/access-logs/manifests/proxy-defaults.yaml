@@ -1,0 +1,12 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ProxyDefaults
+metadata:
+  name: global
+  namespace: consul
+spec:
+  accessLogs:
+    enabled: true
+    # jsonFormat: "{ \"start_time_special\": \"%START_TIME%\"}"
+    # textFormat: "ITS WORKING %START_TIME%" 
+    # type: stdout # Optional w/ valid types "stdout", "stderr", "file"
+    # path: /Users/dans/consul-scenarios/scenario-access-logs/logs/file.log

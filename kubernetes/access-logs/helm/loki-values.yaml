@@ -1,0 +1,10 @@
+grafana:
+  enabled: true
+# This image fixes weirdness with the dashboard
+# https://github.com/grafana/grafana/issues/54535
+  image:
+    tag: 8.5.13
+# # This is needed for the dashboard to work correctly with the api gateway route
+#   grafana.ini:
+#     server:
+#       domain: "http://localhost:8080/grafana/"

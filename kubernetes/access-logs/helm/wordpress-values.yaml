@@ -1,0 +1,16 @@
+# The service name is implied by the Helm release name, in this case "wordpress"
+wordpressUsername: admin
+wordpressPassword: password
+# This is needed for M1 Compatibility
+# https://github.com/bitnami/bitnami-docker-wordpress/issues/316
+image:
+  registry: ttl.sh
+  repository: dans/wordpress-m1
+  tag: 25h
+service:
+  type: ClusterIP
+  ports:
+    http: 80
+mariadb:
+  auth:
+    rootPassword: secretpassword
