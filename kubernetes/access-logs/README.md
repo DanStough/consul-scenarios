@@ -12,12 +12,12 @@ This scenario will configure the following helm charts and manifests:
     1. Consider `kind` of `k3d` for setting up a local cluster. An example setup:
         1. [Rancher Desktop](https://rancherdesktop.io/) with the Moby container runtime selected. This will also install `kubectl` and `helm`. 
         1. [k3d](https://k3d.io/) for creating a cluster with multiple nodes, which is useful for deployments in Consul that have anti-affinity. 
-        1. I use this one for testing. I use this for testing: `k3d cluster create access-logs-testing --agents=3 -p "8080:30080@server:0"`
+        1. I use this one for testing. I use this for testing: `k3d cluster create access-logs-testing --agents=3 -p "8080:30080@agent:0"`
 1. You have a recent (v3) version of `helm` installed.
 
 ## Scenario
 1. Install Consul
-    1. Install the gateway CRDS `kubectl apply --kustomize "github.com/hashicorp/consul-api-gateway/config/crd?ref=v0.4.0"`
+    <!-- 1. Install the gateway CRDS `kubectl apply --kustomize "github.com/hashicorp/consul-api-gateway/config/crd?ref=v0.5.0"` -->
     1. **TEMPORARY** `helm install consul ~/source/consul-k8s/charts/consul -f ./helm/consul-values.yaml --create-namespace --namespace consul`
     <!-- 1. `helm repo add hashicorp https://helm.releases.hashicorp.com `
     1. `helm repo update hashicorp`
@@ -31,11 +31,12 @@ This scenario will configure the following helm charts and manifests:
     1. Part 2: Some more patches for Consul:
         1. kubectl delete svc -n loki loki-headless
         1. kubectl delete svc -n loki loki-memberlist
-
-1. Install Wordpress
+1. Install HashiCups
+    1. `kubectl apply -f ./hashicups` . These were copied from [this GitHub repo](https://github.com/hashicorp-demoapp/hashicups-setups/tree/main/local-k8s-consul-deployment/k8s).
+<!-- 1. Install Wordpress
     1. `helm repo add bitnami https://charts.bitnami.com/bitnami`
     1. `helm repo update bitnami`
-    1. `helm install wordpress bitnami/wordpress --namespace wordpress --create-namespace -f ./helm/wordpress-values.yaml`
+    1. `helm install wordpress bitnami/wordpress --namespace wordpress --create-namespace -f ./helm/wordpress-values.yaml` -->
 1. Kicking the tires 🦵🛞!
     1. Grab the grafana password
     1. Visit the Loki Dashboard, http://localhost:8080/grafana

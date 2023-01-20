@@ -7,9 +7,12 @@ metadata:
 spec:
   gatewayClassName: consul-api-gateway
   listeners:
-  - protocol: HTTP
+  - protocol: HTTPS
     port: 30080
     name: http
     allowedRoutes:
       namespaces:
         from: All
+    tls:
+      certificateRefs:
+        - name: consul-server-cert

@@ -1,0 +1,7 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: loki-grafana
+  namespace: loki
+spec:
+  protocol: http

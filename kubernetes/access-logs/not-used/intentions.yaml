@@ -1,0 +1,27 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: loki
+  namespace: loki
+spec:
+  destination:
+    name: "*"
+  sources:
+    - name: "loki-grafana"
+      action: "allow"
+    - name: "loki-promtail"
+      action: "allow"
+    - name: "loki"
+      action: "allow"
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: loki-grafana
+  namespace: loki
+spec:
+  destination:
+    name: loki-grafana
+  sources:
+    - name: "*"
+      action: allow

@@ -7,4 +7,4 @@ grafana:
 # # This is needed for the dashboard to work correctly with the api gateway route
 #   grafana.ini:
 #     server:
-#       domain: "http://localhost:8080/grafana/"
+#       domain: "https://localhost:8080/grafana/"
