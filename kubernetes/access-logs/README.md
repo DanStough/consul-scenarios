@@ -2,7 +2,7 @@
 
 This scenario demonstrates Envoy access logging on Kubernetes using a log aggregator, mocking an operator implementation.
 This scenario will configure the following helm charts and manifests:
-* consul-k8s w/ API gateway
+* consul-k8s
 * loki-stack
 * hashicups
 
@@ -18,13 +18,13 @@ This scenario will configure the following helm charts and manifests:
 ## Scenario
 1. Install Consul
     <!-- 1. Install the gateway CRDS `kubectl apply --kustomize "github.com/hashicorp/consul-api-gateway/config/crd?ref=v0.5.0"` -->
-    1. **TEMPORARY** `helm install consul ~/source/consul-k8s/charts/consul -f ./helm/consul-values.yaml --create-namespace --namespace consul`
+    1. **TEMPORARY** Install from source since the CRDs have changed: `helm install consul ~/source/consul-k8s/charts/consul -f ./helm/consul-values.yaml --create-namespace --namespace consul`
     <!-- 1. `helm repo add hashicorp https://helm.releases.hashicorp.com `
     1. `helm repo update hashicorp`
     1. `helm install consul hashicorp/consul --namespace consul --create-namespace -f ./helm/consul-values.yaml` -->
 1. Install Loki
     1. Precreate the ns for the next step `kubectl create ns loki`
-    1. We need to make Consul's catalog happy with this help chart, so we're going to need to add some patches. Plus we want to setup the API Gateway.  `kubectl apply -f manifests/`
+    1. We need to make Consul's catalog happy with this help chart, so we're going to need to add some patches. `kubectl apply -f manifests/`
     1. `helm repo add grafana https://grafana.github.io/helm-charts`
     1. `helm repo update grafana`
     1. `helm install loki grafana/loki-stack --namespace loki --create-namespace -f ./helm/loki-values.yaml`
@@ -38,14 +38,18 @@ This scenario will configure the following helm charts and manifests:
     1. `helm repo update bitnami`
     1. `helm install wordpress bitnami/wordpress --namespace wordpress --create-namespace -f ./helm/wordpress-values.yaml` -->
 1. Kicking the tires 🦵🛞!
-    1. Grab the grafana password
-    1. Visit the Loki Dashboard, http://localhost:8080/grafana
-        1. This query will give you all of the HTTP traffic for wordpress: `{app="wordpress",container="consul-dataplane"} | json | __error__!="JSONParserErr"  | protocol="HTTP/1.1"`
-    1. With the dashboard visible, try visiting some of the following pages and watching the access logs.
-        1. Blog home page
-        1. wpadmin
+    1. Grab the grafana password: `kubectl get secret --namespace loki loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
+    1. Visit the Loki Dashboard:
+        1. `kubectl port-forward -n loki service/loki-grafana 8443:80`
+        1. Visit http://localhost:8443/grafana. User is `admin`. Password is from the previous step.
+        1. Visit the "Explore" tab on the right menu bar.
+        1. You can use the query builder to slice access logs, but this query will give you interesting HTTP traffic for the product API: `{app="products-api",container="consul-dataplane",stream="stdout"} | json | protocol="HTTP/1.1" | path!="/health"`
+    1. With the dashboard visible, try visiting some of the HashiCups pages and watching the access logs.
+        1. In a new terminal: `kubectl port-forward service/nginx 8445:80`
+        1. Visit http://localhost:8445. 
+
 
 ## Resources
 1. [Deploy Loki on Kubernetes, and monitor the logs of your pods](https://cylab.be/blog/197/deploy-loki-on-kubernetes-and-monitor-the-logs-of-your-pods)
-1. [Wordpress packaged by Bitnami](https://github.com/bitnami/charts/tree/main/bitnami/wordpress/#installing-the-chart)
-1. [Control Access into the Service Mesh with Consul API Gateway](https://developer.hashicorp.com/consul/tutorials/kubernetes/kubernetes-api-gateway)
+<!-- 1. [Wordpress packaged by Bitnami](https://github.com/bitnami/charts/tree/main/bitnami/wordpress/#installing-the-chart)
+1. [Control Access into the Service Mesh with Consul API Gateway](https://developer.hashicorp.com/consul/tutorials/kubernetes/kubernetes-api-gateway) -->

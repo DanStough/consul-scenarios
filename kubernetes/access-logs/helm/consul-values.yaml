@@ -1,7 +1,7 @@
 global:
-  image: ttl.sh/dans/consul-dev-access-logs:24h
-  imageK8S: ttl.sh/dans/consul-k8s-dev-access-logs:24h
-  imageConsulDataplane: ttl.sh/dans/consul-dataplane-test-001:24h
+  image: hashicorppreview/consul:1.15-dev-d94fc2d8ad5ddbe88d4e82427e59812bee8cb75f  # Right now changes are unreleased
+  imageK8S: hashicorppreview/consul-k8s-control-plane:1.1.0-dev-9ab7bea6a52043eb25b0673bb77562daa418251c
+  imageConsulDataplane: dstoughhashicorp/consul-dataplane:access-logs-v1 # Unreleased changes: allows logging to stdout and adds admin access logs
   name: consul
   datacenter: dc1
   # # The main enabled/disabled setting.
