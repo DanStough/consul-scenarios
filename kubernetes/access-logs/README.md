@@ -1,5 +1,8 @@
 # Access Logs
 
+* [Link to docs PR](https://github.com/hashicorp/consul/pull/15948)
+* [Link to RFC (Internal)](https://go.hashi.co/rfc/csl-241)
+
 This scenario demonstrates Envoy access logging on Kubernetes using a log aggregator, mocking an operator implementation.
 This scenario will configure the following helm charts and manifests:
 * consul-k8s
@@ -33,10 +36,9 @@ This scenario will configure the following helm charts and manifests:
         1. kubectl delete svc -n loki loki-memberlist
 1. Install HashiCups
     1. `kubectl apply -f ./hashicups` . These were copied from [this GitHub repo](https://github.com/hashicorp-demoapp/hashicups-setups/tree/main/local-k8s-consul-deployment/k8s).
-<!-- 1. Install Wordpress
-    1. `helm repo add bitnami https://charts.bitnami.com/bitnami`
-    1. `helm repo update bitnami`
-    1. `helm install wordpress bitnami/wordpress --namespace wordpress --create-namespace -f ./helm/wordpress-values.yaml` -->
+1. Configure access logs.
+    1. See `proxy-defaults.yaml` for customization of access logs.
+    1. `kubectl apply -f proxy-defaults.yaml`
 1. Kicking the tires 🦵🛞!
     1. Grab the grafana password: `kubectl get secret --namespace loki loki-grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo`
     1. Visit the Loki Dashboard:
@@ -47,7 +49,10 @@ This scenario will configure the following helm charts and manifests:
     1. With the dashboard visible, try visiting some of the HashiCups pages and watching the access logs.
         1. In a new terminal: `kubectl port-forward service/nginx 8445:80`
         1. Visit http://localhost:8445. 
-
+<!-- 1. Install Wordpress
+    1. `helm repo add bitnami https://charts.bitnami.com/bitnami`
+    1. `helm repo update bitnami`
+    1. `helm install wordpress bitnami/wordpress --namespace wordpress --create-namespace -f ./helm/wordpress-values.yaml` -->
 
 ## Resources
 1. [Deploy Loki on Kubernetes, and monitor the logs of your pods](https://cylab.be/blog/197/deploy-loki-on-kubernetes-and-monitor-the-logs-of-your-pods)
