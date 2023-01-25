@@ -1,0 +1,12 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ProxyDefaults
+metadata:
+  name: global
+spec:
+  #meshGateway:
+  #  mode: local
+  config:
+    connect_timeout_ms: 1111
+    # passive_health_check:
+    #   interval: 19s
+    # fake_field: blah

@@ -1,0 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceResolver
+metadata:
+  name: backend
+spec:
+  failover:
+    '*':
+      targets:
+      - service: backend
+        peer: cluster-02

@@ -2,3 +2,8 @@
 logs/
 consul.d/
 tmp/
+
+license.*
+license/
+
+*token*

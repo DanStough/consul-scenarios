@@ -1,0 +1,25 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: frontend
+spec:
+  #protocol: "http"
+  upstreamConfig:
+    defaults:
+      connectTimeoutMs: 2222
+      meshGateway:
+        mode: local
+    overrides:
+      - name: backend
+        connectTimeoutMs: 3333
+        #meshGateway:
+        #  mode: remote
+        #passiveHealthCheck:
+        #  interval: 17s
+---
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: backend
+spec:
+  protocol: "http"

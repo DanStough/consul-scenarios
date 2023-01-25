@@ -1,0 +1,64 @@
+# Service to expose frontend
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9090
+    targetPort: 9090
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+      annotations:
+        "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/transparent-proxy": "true"
+        "consul.hashicorp.com/connect-service-upstreams": 'backend:9091'
+        #"consul.hashicorp.com/connect-service-upstreams": 'backend.svc.cluster-02.peer:9091'
+        #"consul.hashicorp.com/connect-service-upstreams": 'backend.svc.default.ns.cluster-02.peer:9091'
+    spec:
+      serviceAccountName: frontend
+      containers:
+      - name: frontend
+        image: nicholasjackson/fake-service:v0.22.4
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        ports:
+        - containerPort: 9090
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:9090"
+        - name: "UPSTREAM_URIS"
+          value: "http://localhost:9091"
+          #value: "http://backend.virtual.cluster-02.consul"
+          #value: "http://backend.virtual.default.ns.default.ap.cluster-02.peer.consul"
+        - name: "NAME"
+          value: "frontend"
+        - name: "MESSAGE"
+          value: "Hello World"
+        - name: "HTTP_CLIENT_KEEP_ALIVES"
+          value: "false"
+

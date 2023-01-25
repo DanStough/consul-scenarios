@@ -1,0 +1,19 @@
+global:
+  name: consul
+  #image: "hashicorp/consul:1.14.3"
+  # image: "k3d-registry.localhost:5000/consul-dev"
+  peering:
+    enabled: true
+  tls:
+    enabled: true
+  ui:
+    enabled: true
+connectInject:
+  transparentProxy:
+    defaultEnabled: true
+meshGateway:
+  enabled: true
+# Everything below is for k3d
+  service:
+    type: "NodePort"
+    nodePort: "30100"
