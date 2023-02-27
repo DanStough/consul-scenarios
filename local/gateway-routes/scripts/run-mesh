@@ -1,0 +1,39 @@
+#!/bin/bash
+
+cleanup() {
+  echo "shutting down upstreams"
+}
+
+trap 'trap " " SIGTERM; kill 0; wait; cleanup' SIGINT SIGTERM
+
+consul config write entries/proxy-defaults.hcl
+
+consul services register entries/service-one.hcl
+consul services register entries/service-one-proxy.hcl
+consul services register entries/service-two.hcl
+consul services register entries/service-two-proxy.hcl
+
+cat << EOF > /tmp/service-one.html
+HTTP/1.1 200 GET
+Content-Type: text/plain; charset=UTF-8
+
+service-one
+EOF
+
+cat << EOF > /tmp/service-two.html
+HTTP/1.1 200 GET
+Content-Type: text/plain; charset=UTF-8
+
+service-two
+EOF
+
+echo "Running service-one"
+ncat -e "/bin/cat /tmp/service-one.html" -k -l 9002 &
+echo "Running service-one sidecar proxy"
+consul connect envoy -sidecar-for service-one -admin-bind 127.0.0.1:9092 -- -l trace &
+echo "Running service-two"
+ncat -e "/bin/cat /tmp/service-two.html" -k -l 9008 &
+echo "Running service-two sidecar proxy"
+consul connect envoy -sidecar-for service-two -admin-bind 127.0.0.1:9093 -- -l trace &
+
+wait

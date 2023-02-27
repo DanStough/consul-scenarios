@@ -1,0 +1,35 @@
+openssl req -x509 -sha256 -nodes -days 1825 -newkey rsa:2048 -keyout private.key -out certificate.crt -config scripts/wildcard.cnf >/dev/null 2>&1
+
+cat << EOC > entries/wildcard.hcl
+Kind = "inline-certificate"
+Name = "wildcard"
+PrivateKey = <<EOF
+EOC
+cat private.key >> entries/wildcard.hcl
+cat << EOC >> entries/wildcard.hcl
+EOF
+Certificate = <<EOF
+EOC
+cat certificate.crt >> entries/wildcard.hcl
+cat << EOC >> entries/wildcard.hcl
+EOF
+EOC
+
+openssl req -x509 -sha256 -nodes -days 1825 -newkey rsa:2048 -keyout private.key -out certificate.crt -config scripts/example.cnf >/dev/null 2>&1
+
+cat << EOC > entries/example.hcl
+Kind = "inline-certificate"
+Name = "example"
+PrivateKey = <<EOF
+EOC
+cat private.key >> entries/example.hcl
+cat << EOC >> entries/example.hcl
+EOF
+Certificate = <<EOF
+EOC
+cat certificate.crt >> entries/example.hcl
+cat << EOC >> entries/example.hcl
+EOF
+EOC
+
+rm -f certificate.crt private.key

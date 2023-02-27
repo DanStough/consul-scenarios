@@ -1,0 +1,11 @@
+#!/bin/bash
+
+cleanup() {
+  echo "shutting down upstreams"
+}
+
+trap 'trap " " SIGTERM; kill 0; wait; cleanup' SIGINT SIGTERM
+
+consul agent -dev --log-level err
+
+wait
