@@ -1,0 +1,17 @@
+[req]
+distinguished_name = req_distinguished_name
+req_extensions = v3_req
+prompt = no
+[v3_req]
+authorityKeyIdentifier=keyid,issuer
+basicConstraints = critical,CA:FALSE
+extendedKeyUsage=serverAuth
+keyUsage = critical, digitalSignature, keyEncipherment
+subjectKeyIdentifier=hash
+[req_distinguished_name]
+C = US
+ST = VA
+L = Fairfax
+O = HashiCorp
+OU = Consul
+CN = *.consul.local

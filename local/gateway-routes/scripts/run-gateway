@@ -1,0 +1,17 @@
+#!/bin/bash
+
+cleanup() {
+  echo "shutting down upstreams"
+}
+
+trap 'trap " " SIGTERM; kill 0; wait; cleanup' SIGINT SIGTERM
+
+consul config write entries/example.hcl
+consul config write entries/wildcard.hcl
+consul config write entries/route-one.hcl
+consul config write entries/route-two.hcl
+consul config write entries/gateway.hcl
+
+consul connect envoy -gateway api -register -service api-gateway -proxy-id api-gateway &
+
+wait
