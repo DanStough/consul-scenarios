@@ -1,8 +1,8 @@
 global:
   name: consul
   # image: 'hashicorp/consul-enterprise:1.14.3-ent'
-  #image: "hashicorp/consul:1.14.3"
   image: "k3d-registry.localhost:5000/consul-dev"
+  imageK8S: ttl.sh/dans/consul-k8s-dev-access-logs:24h 
   peering:
     enabled: true
   tls:
@@ -17,9 +17,9 @@ global:
   adminPartitions:
     enabled: true
     name: "default"
-connectInject:
-  transparentProxy:
-    defaultEnabled: true
+# connectInject:
+#   transparentProxy:
+#     defaultEnabled: true
 meshGateway:
   enabled: true
 # Everything below is for k3d

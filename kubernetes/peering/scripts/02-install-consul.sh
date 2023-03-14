@@ -25,7 +25,9 @@ if [ "$DISTRO" = "ent" ]; then :
 fi
 
 export HELM_RELEASE_NAME=cluster-01
-helm install ${HELM_RELEASE_NAME} hashicorp/consul --create-namespace --namespace consul --version "1.0.1" --values "./helm/values-${DISTRO}.yaml" --set global.datacenter=dc1 --kube-context $CLUSTER1_CONTEXT
+helm install ${HELM_RELEASE_NAME}  ~/source/consul-k8s/charts/consul -f "./helm/values-${DISTRO}.yaml"  --create-namespace --namespace consul --set global.datacenter=dc1 --kube-context $CLUSTER1_CONTEXT
+# helm install ${HELM_RELEASE_NAME} hashicorp/consul --create-namespace --namespace consul --version "1.0.1" --values "./helm/values-${DISTRO}.yaml" --set global.datacenter=dc1 --kube-context $CLUSTER1_CONTEXT
 export HELM_RELEASE_NAME=cluster-02
-helm install ${HELM_RELEASE_NAME} hashicorp/consul --create-namespace --namespace consul --version "1.0.1" --values "./helm/values-${DISTRO}.yaml" --set global.datacenter=dc2 --kube-context $CLUSTER2_CONTEXT
+helm install ${HELM_RELEASE_NAME}  ~/source/consul-k8s/charts/consul -f "./helm/values-${DISTRO}.yaml"  --create-namespace --namespace consul --set global.datacenter=dc2 --kube-context $CLUSTER2_CONTEXT
+# helm install ${HELM_RELEASE_NAME} hashicorp/consul --create-namespace --namespace consul --version "1.0.1" --values "./helm/values-${DISTRO}.yaml" --set global.datacenter=dc2 --kube-context $CLUSTER2_CONTEXT
 

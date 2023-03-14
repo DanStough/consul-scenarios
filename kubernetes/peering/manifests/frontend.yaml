@@ -34,10 +34,11 @@ spec:
         app: frontend
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/transparent-proxy": "true"
-        "consul.hashicorp.com/connect-service-upstreams": 'backend:9091'
-        #"consul.hashicorp.com/connect-service-upstreams": 'backend.svc.cluster-02.peer:9091'
-        #"consul.hashicorp.com/connect-service-upstreams": 'backend.svc.default.ns.cluster-02.peer:9091'
+        # "consul.hashicorp.com/transparent-proxy": "true"
+        "consul.hashicorp.com/transparent-proxy": "false"
+        # "consul.hashicorp.com/connect-service-upstreams": 'backend:9091'
+        # "consul.hashicorp.com/connect-service-upstreams": 'backend.svc.cluster-02.peer:9091'
+        "consul.hashicorp.com/connect-service-upstreams": 'backend.svc.default.ns.cluster-02.peer:9091,backend:9092'
     spec:
       serviceAccountName: frontend
       containers:

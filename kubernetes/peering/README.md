@@ -32,6 +32,21 @@ For debuggig, consider using the following aliases:
 * In the desired consul repo, build and push your dev image:
     * `make dev-docker && docker tag consul-dev localhost:5000/consul-dev && docker push localhost:5000/consul-dev`
 * Uncomment the this line in the helm values file: `image: "k3d-registry.localhost:5000/consul-dev"`
+* If you're building the kube controller as well:
+    * In the kube repo ``
+    * Uncomment this line in the helm values file: `imageK8s: "k3d-registry.localhost:5000/consul-k8s-controller-dev"`
+    * Switch the script `./scripts/01-reset-clusters.sh` to point to your local helm repo installation.
+
+## Scenarios
+
+The default `./scripts/04-conf.sh` script will deploy a service-default name
+
+### Upstream Overrides
+
+Under construction.
 
 
-## TBD Scenarios
+### Failover
+
+Under construction.
+Apply the `./manifests/failover.yaml`.

@@ -12,6 +12,12 @@ spec:
     overrides:
       - name: backend
         connectTimeoutMs: 3333
+        peer: cluster-02
+      - name: bananas # doesn't need to exist to check that compatibility mode is active.
+        connectTimeoutMs: 6666
+        peer: orange
+      - name: backend
+        connectTimeoutMs: 4444
         #meshGateway:
         #  mode: remote
         #passiveHealthCheck:
