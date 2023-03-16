@@ -5,6 +5,7 @@
 * @DanStough
 * @jessingrass
 * @hashi-derek
+* @andrewstucki
 
 These scenarios are divided into 3 categories of target environment:
 1. **Local** - to be run on a single workstation
