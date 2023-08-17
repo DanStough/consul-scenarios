@@ -1,0 +1,39 @@
+{
+    "resource": {
+        "id": {
+            "name": "royco-waystar-75675f5897-7ci7o",
+            "type": {
+                "group": "catalog", 
+                "group_version": "v1alpha1", 
+                "kind": "Workload"
+            },
+            "tenancy": {
+                "partition": "default", 
+                "namespace":"default"
+            }
+        },
+        "data": {
+            "@type": "hashicorp.consul.catalog.v1alpha1.Workload",
+            "addresses": [
+                { "host": "10.0.0.1", "ports": ["public", "admin", "mesh"]}
+            ],
+            "ports": {
+                "public": {
+                    "port": 80,
+                    "protocol": "PROTOCOL_TCP"
+                },
+                "admin": {
+                    "port": 8080,
+                    "protocol": "PROTOCOL_TCP"
+                },
+                "mesh": {
+                    "port": 20000,
+                    "protocol": "PROTOCOL_MESH"
+                }
+            },
+            "identity": "barbie",
+            "nodeName": "k8s-node-0-virtual"
+        }
+    }
+}
+
