@@ -4,16 +4,17 @@
             "name": "royco-waystar-75675f5897-7ci7o",
             "type": {
                 "group": "catalog", 
-                "group_version": "v1alpha1", 
+                "group_version": "v2beta1", 
                 "kind": "Workload"
             },
             "tenancy": {
                 "partition": "default", 
-                "namespace":"default"
+                "namespace":"default",
+                "peerName": "local"
             }
         },
         "data": {
-            "@type": "hashicorp.consul.catalog.v1alpha1.Workload",
+            "@type": "hashicorp.consul.catalog.v2beta1.Workload",
             "addresses": [
                 { "host": "10.0.0.1", "ports": ["public", "admin", "mesh"]}
             ],

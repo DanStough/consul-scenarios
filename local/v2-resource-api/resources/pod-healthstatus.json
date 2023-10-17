@@ -1,0 +1,38 @@
+{
+    "resource": {
+        "id": {
+            "name": "royco-waystar-75675f5897-7ci7o",
+            "type": {
+                "group": "catalog", 
+                "group_version": "v2beta1", 
+                "kind": "HealthStatus"
+            },
+            "tenancy": {
+                "partition": "default", 
+                "namespace":"default",
+                "peerName": "local"
+            }
+        },
+        "owner": {
+            "name": "royco-waystar-75675f5897-7ci7o",
+            "type": {
+                "group": "catalog", 
+                "group_version": "v1alpha1", 
+                "kind": "Workload"
+            },
+            "tenancy": {
+                "partition": "default", 
+                "namespace":"default",
+                "peerName": "local"
+            }
+        },
+        "data": {
+            "@type": "hashicorp.consul.catalog.v1alpha1.HealthStatus",
+            "type": "Kubernetes Health Check",
+            "output": "Pod is Ready",
+            "description": "lorem ispsum",
+            "status": "HEALTH_PASSING"
+        }
+    }
+}
+

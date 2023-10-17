@@ -17,7 +17,7 @@ consul agent -dev -log-level=trace -config-file config_dc1.hcl 1>./logs/dc1.log 
 Use `buf curl` to check list the (nonexistent) workloads:
 ```bash
 buf curl --insecure --schema ~/source/consul/proto-public --protocol grpc --http2-prior-knowledge \
---data '{"type": {"group": "catalog", "group_version": "v1alpha1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default"}}' \
+--data '{"type": {"group": "catalog", "group_version": "v2beta1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default"}}' \
 https://localhost:8503/hashicorp.consul.resource.ResourceService/List
 ```
 
@@ -31,13 +31,13 @@ https://localhost:8503/hashicorp.consul.resource.ResourceService/Write
 Read a workload.
 ```bash
 buf curl --insecure --schema ~/source/consul/proto-public --protocol grpc --http2-prior-knowledge \
---data '{"id": {"name": "royco-waystar-75675f5897-7ci7o", "type": {"group": "catalog", "group_version": "v1alpha1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default"}}}' \
+--data '{"id": {"name": "royco-waystar-75675f5897-7ci7o", "type": {"group": "catalog", "group_version": "v2beta1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default", "peerName": "local"}}}' \
 https://localhost:8503/hashicorp.consul.resource.ResourceService/Read
 ```
 
 Delete a workload.
 ```bash
 buf curl --insecure --schema ~/source/consul/proto-public --protocol grpc --http2-prior-knowledge \
---data '{"id": {"name": "royco-waystar-75675f5897-7ci7o", "type": {"group": "catalog", "group_version": "v1alpha1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default"}}}' \
+--data '{"id": {"name": "royco-waystar-75675f5897-7ci7o", "type": {"group": "catalog", "group_version": "v2beta1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default", "peerName": "local"}}}' \
 https://localhost:8503/hashicorp.consul.resource.ResourceService/Delete
 ```

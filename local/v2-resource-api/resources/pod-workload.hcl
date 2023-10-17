@@ -1,10 +1,11 @@
 ID {
-  Type = gvk("catalog.v1alpha1.Workload")
+  Type = gvk("catalog.v2beta1.Workload")
   Name = " royco-waystar-75675f5897-7ci7o"
   
   Tenancy = {
 	Namespace = "default"
 	Partition = "default"
+    PeerName = "local"
   }
 }
 
