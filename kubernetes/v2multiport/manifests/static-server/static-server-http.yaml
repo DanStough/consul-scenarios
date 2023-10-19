@@ -1,0 +1,94 @@
+# Service to expose static-server
+apiVersion: v1
+kind: Service
+metadata:
+  name: static-server
+spec:
+  selector:
+    app: static-server
+  ports:
+  - name: http
+    protocol: TCP
+    port: 8080
+    targetPort: http
+    appProtocol: http
+  - name: admin
+    protocol: TCP
+    port: 9090
+    targetPort: admin
+    appProtocol: http
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: static-server
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-server
+  labels:
+    app: static-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: static-server
+  template:
+    metadata:
+      labels:
+        app: static-server
+      annotations:
+        # This annotations should be redundant with the kube config but including for completeness
+        "consul.hashicorp.com/mesh-inject": "true"
+        "consul.hashicorp.com/transparent-proxy": "false"
+    spec:
+      serviceAccountName: static-server
+      containers:
+      - name: static-server
+        image: nicholasjackson/fake-service:v0.26.0
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        ports:
+          - containerPort: 8080
+            name: http
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:8080"
+        # - name: "UPSTREAM_URIS"
+        #   value: "http://localhost:9091"
+          #value: "http://backend.virtual.cluster-02.consul"
+          #value: "http://backend.virtual.default.ns.default.ap.cluster-02.peer.consul"
+        - name: "NAME"
+          value: "static-server"
+        - name: "MESSAGE"
+          value: "Hello World"
+        - name: "HTTP_CLIENT_KEEP_ALIVES"
+          value: "false"
+        resources:
+          limits:
+            cpu: 700m
+            memory: 500Mi
+      - name: static-server-admin
+        image: nicholasjackson/fake-service:v0.26.0
+        securityContext:
+          capabilities:
+            add: ["NET_ADMIN"]
+        ports:
+          - containerPort: 9090
+            name: admin
+        env:
+        - name: "LISTEN_ADDR"
+          value: "0.0.0.0:9090"
+        - name: "NAME"
+          value: "static-server-admin"
+        - name: "MESSAGE"
+          value: "Hello Admin"
+        - name: "HTTP_CLIENT_KEEP_ALIVES"
+          value: "false"
+        resources:
+          limits:
+            cpu: 700m
+            memory: 500Mi
+

@@ -41,3 +41,11 @@ buf curl --insecure --schema ~/source/consul/proto-public --protocol grpc --http
 --data '{"id": {"name": "royco-waystar-75675f5897-7ci7o", "type": {"group": "catalog", "group_version": "v2beta1", "kind": "Workload"}, "tenancy": {"partition": "default", "namespace":"default", "peerName": "local"}}}' \
 https://localhost:8503/hashicorp.consul.resource.ResourceService/Delete
 ```
+
+Read with ACLs enabled. (untested)
+```bash
+buf curl --insecure --schema ~/source/consul/proto-public --protocol grpc --http2-prior-knowledge \
+--header "x-consul-token:<your token here>" \
+--data @resources/pod-workload.json \
+https://localhost:8503/hashicorp.consul.resource.ResourceService/Write
+```

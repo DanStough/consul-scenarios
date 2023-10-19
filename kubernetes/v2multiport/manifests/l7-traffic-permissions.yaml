@@ -1,0 +1,16 @@
+apiVersion: auth.consul.hashicorp.com/v2beta1
+kind: TrafficPermissions
+metadata:
+  name: client-to-server
+spec:
+  destination:
+    identityName: static-server
+  action: ACTION_ALLOW
+  permissions:
+  - sources:
+    - identityName: static-client
+    destinationRules:
+    - header:
+        name: "x-dan-test"
+        present: true
+
