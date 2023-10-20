@@ -20,7 +20,6 @@ This demo contains a dump of v2 multiport configurations on Kubernetes.
 
 ## Setup and Peer the Clusters
 
-* `./scripts/00-registry.sh` <-- This step only needs to be performed once.
 * `./scripts/01-reset-clusters.sh`
 * `./scripts/02-install-consul.sh` OR `./scripts/02-install-consul.sh ent`. See note above about license file for Consul Enterprise.
 * wait for Consul to come up in both clusters...
@@ -41,6 +40,36 @@ This demo contains a dump of v2 multiport configurations on Kubernetes.
 ### Traffic Permissions
 
 #### L4 Setup
+```bash
+
+# Setup
+k apply -f manifests/static-client.yaml
+k apply -f manifests/static-server/static-server.yaml
+
+# Test
+k exec deploy/static-client -c static-client -- curl static-server:8080 # should return immediately with 52
+k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
+
+k apply -f manifests/l4-traffic-permissions.yaml
+
+k exec deploy/static-client -c static-client -- curl static-server:8080 # should succeed
+k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
+
+
+
+```
 
 #### L7 Setup
+
+
+## Debug Commands
+
+```bash
+# Read a resource from Consul
+ k -n consul exec consul-server-0 -c consul -it -- consul resource list catalog.v2beta1.Workload
+
+# Port forward envoy
+
+
+```
 

@@ -18,15 +18,11 @@ spec:
     metadata:
       labels:
         app: static-client
-      annotations:
-        # This annotations should be redundant with the kube config but including for completeness
-        "consul.hashicorp.com/mesh-inject": "true"
-        "consul.hashicorp.com/transparent-proxy": "false"
     spec:
       serviceAccountName: static-client
       containers:
       - name: static-client
-        image: busybox
+        image: curlimages/curl
         securityContext:
           capabilities:
             add: ["NET_ADMIN"]

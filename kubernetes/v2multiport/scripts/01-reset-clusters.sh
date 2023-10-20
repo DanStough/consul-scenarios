@@ -5,4 +5,4 @@
 
 k3d cluster delete c1
 sleep 1
-k3d cluster create c1 --registry-use k3d-registry.localhost:5000
+k3d cluster create c1

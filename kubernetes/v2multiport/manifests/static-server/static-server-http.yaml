@@ -7,10 +7,10 @@ spec:
   selector:
     app: static-server
   ports:
-  - name: http
+  - name: web
     protocol: TCP
     port: 8080
-    targetPort: http
+    targetPort: web
     appProtocol: http
   - name: admin
     protocol: TCP
@@ -38,10 +38,6 @@ spec:
     metadata:
       labels:
         app: static-server
-      annotations:
-        # This annotations should be redundant with the kube config but including for completeness
-        "consul.hashicorp.com/mesh-inject": "true"
-        "consul.hashicorp.com/transparent-proxy": "false"
     spec:
       serviceAccountName: static-server
       containers:
@@ -52,7 +48,7 @@ spec:
             add: ["NET_ADMIN"]
         ports:
           - containerPort: 8080
-            name: http
+            name: web
         env:
         - name: "LISTEN_ADDR"
           value: "0.0.0.0:8080"

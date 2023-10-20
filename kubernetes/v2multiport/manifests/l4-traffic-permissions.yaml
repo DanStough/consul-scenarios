@@ -9,3 +9,6 @@ spec:
   permissions:
   - sources:
     - identityName: static-client
+    destinationRules:
+    - portNames:
+      - web
