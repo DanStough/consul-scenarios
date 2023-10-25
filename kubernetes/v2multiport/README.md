@@ -39,12 +39,12 @@ This demo contains a dump of v2 multiport configurations on Kubernetes.
 
 ### Traffic Permissions
 
-#### L4 Setup
+#### L4 Setup 
 ```bash
 
 # Setup
 k apply -f manifests/static-client.yaml
-k apply -f manifests/static-server/static-server.yaml
+k apply -f manifests/static-server/static-server-tcp.yaml
 
 # Test
 k exec deploy/static-client -c static-client -- curl static-server:8080 # should return immediately with 52
@@ -54,12 +54,80 @@ k apply -f manifests/l4-traffic-permissions.yaml
 
 k exec deploy/static-client -c static-client -- curl static-server:8080 # should succeed
 k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
-
-
-
 ```
 
 #### L7 Setup
+
+##### w/ L4 Permissions
+```bash
+
+# Setup
+k apply -f manifests/static-client.yaml
+k apply -f manifests/static-server/static-server-http.yaml
+
+# Test
+k exec deploy/static-client -c static-client -- curl static-server:8080 # should return immediately with 52
+k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
+
+k apply -f manifests/l4-traffic-permissions.yaml
+
+k exec deploy/static-client -c static-client -- curl static-server:8080 # should succeed
+k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
+```
+
+##### w/ L4 Permissions + Partition Scope 
+```bash
+
+# Setup
+k create ns banana
+k -n banana apply -f manifests/static-client.yaml
+k create ns orange
+k -n orange apply -f manifests/static-server/static-server-http.yaml
+
+# Test
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:8080 # should return immediately with 52
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:9090 # should return immediately with 52
+
+k -n orange apply -f manifests/l4-any-ns-traffic-permissions.yaml
+
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:8080 # should succeed
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:9090 # should return immediately with 52
+```
+
+##### w/ L7 Permissions
+Not supported.
+
+### ProxyConfiguration 
+
+```bash
+k apply -f manifests/static-client.yaml
+k apply -f manifests/static-server/static-server-tcp.yaml
+k apply -f manifests/l4-traffic-permissions.yaml
+
+k apply -f manifests/proxyconfiguration-one.yaml # Observer changes to the Envoy config directly through the Envoy admin API
+k apply -f manifests/proxyconfiguration-two.yaml # No change as the oldest timestamp wins
+
+k delete -f manifests/proxyconfiguration-one.yaml # Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
+
+k delete po <static-server po> # we delete the pod to re-generate the envoy bootstrap config
+# Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
+```
+
+### ProxyConfiguration w/ Namespaces
+
+```bash
+k apply -f manifests/static-client.yaml
+k apply -f manifests/static-server/static-server-tcp.yaml
+k apply -f manifests/l4-traffic-permissions.yaml
+
+k apply -f manifests/proxyconfiguration-one.yaml # Observer changes to the Envoy config directly through the Envoy admin API
+k apply -f manifests/proxyconfiguration-two.yaml # No change as the oldest timestamp wins
+
+k delete -f manifests/proxyconfiguration-one.yaml # Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
+
+k delete po <static-server po> # we delete the pod to re-generate the envoy bootstrap config
+# Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
+```
 
 
 ## Debug Commands

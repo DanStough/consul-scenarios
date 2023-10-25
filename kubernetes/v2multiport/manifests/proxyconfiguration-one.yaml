@@ -1,0 +1,16 @@
+apiVersion: mesh.consul.hashicorp.com/v2beta1
+kind: ProxyConfiguration
+metadata:
+  name: static-server-override-one
+spec:
+  workloads:
+    prefixes:
+    - "static-server-"
+  bootstrapConfig:
+    statsBindAddr: "127.0.0.1:6666"
+  dynamicConfig:
+    # Only the web port should be enabled using the TPs
+    localConnection:
+      web:
+        connectTimeout: "123s"
+        requestTimeout: "123s"

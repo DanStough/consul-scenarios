@@ -1,4 +1,3 @@
-# Not supported in 1.17
 apiVersion: auth.consul.hashicorp.com/v2beta1
 kind: TrafficPermissions
 metadata:
@@ -9,9 +8,7 @@ spec:
   action: ACTION_ALLOW
   permissions:
   - sources:
-    - identityName: static-client
+    - partition: default
     destinationRules:
-    - header:
-        name: "x-dan-test"
-        present: true
-
+    - portNames:
+      - web
