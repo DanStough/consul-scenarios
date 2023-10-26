@@ -1,0 +1,32 @@
+global:
+  name: consul
+  image: hashicorppreview/consul-enterprise:1.17.0
+  imageK8S: hashicorppreview/consul-k8s-control-plane:1.3.0
+  imageConsulDataplane: hashicorppreview/consul-dataplane:1.3.0
+  enterpriseLicense:
+    secretName: license
+    secretKey: license.txt
+    enableLicenseAutoload: true
+  enableConsulNamespaces: true
+  # NOT SUPPORTED IN 1.17
+  # adminPartitions:
+  #   enabled: true
+  #   name: "default"
+  tls:
+    enabled: true
+  acls:
+    manageSystemACLs: true
+  experiments: ["resource-apis"]
+ui:
+  enabled: false
+server:
+  enabled: true
+  replicas: 1
+connectInject:
+  default: true
+  transparentProxy:
+    defaultEnabled: false
+  mirroringK8S: true
+
+
+

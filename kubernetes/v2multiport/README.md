@@ -37,6 +37,8 @@ This demo contains a dump of v2 multiport configurations on Kubernetes.
 
 ## Scenarios
 
+All of these tests use values-ent.yaml except where noted.
+
 ### Traffic Permissions
 
 #### L4 Setup 
@@ -66,13 +68,13 @@ k apply -f manifests/static-client.yaml
 k apply -f manifests/static-server/static-server-http.yaml
 
 # Test
-k exec deploy/static-client -c static-client -- curl static-server:8080 # should return immediately with 52
-k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
+k exec deploy/static-client -c static-client -- curl static-server:8080 # should return immediately with RBAC DENIED
+k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with RBAC DENIED
 
 k apply -f manifests/l4-traffic-permissions.yaml
 
 k exec deploy/static-client -c static-client -- curl static-server:8080 # should succeed
-k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with 52
+k exec deploy/static-client -c static-client -- curl static-server:9090 # should return immediately with RBAC DENIED
 ```
 
 ##### w/ L4 Permissions + Partition Scope 
@@ -85,13 +87,35 @@ k create ns orange
 k -n orange apply -f manifests/static-server/static-server-http.yaml
 
 # Test
-k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:8080 # should return immediately with 52
-k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:9090 # should return immediately with 52
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:8080 # should return immediately with RBAC DENIED
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:9090 # should return immediately with RBAC DENIED
 
 k -n orange apply -f manifests/l4-any-ns-traffic-permissions.yaml
 
 k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:8080 # should succeed
-k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:9090 # should return immediately with 52
+k -n banana exec deploy/static-client -c static-client -- curl static-server.orange:9090 # should return immediately with RBAC DENIED
+```
+
+##### w/ L4 Permissions + Partition Scope + Explicit Destinations
+
+**This test uses `values-ent-no-tproxy.yaml`**
+
+```bash
+
+# Setup
+k create ns banana
+k -n banana apply -f manifests/static-client-explicit-ns.yaml
+k create ns orange
+k -n orange apply -f manifests/static-server/static-server-http.yaml
+
+# Test
+k -n banana exec deploy/static-client -c static-client -- curl localhost:1234 # should return immediately with RBAC DENIED
+k -n banana exec deploy/static-client -c static-client -- curl localhost:2345 # should return immediately with RBAC DENIED
+
+k -n orange apply -f manifests/l4-any-ns-traffic-permissions.yaml
+
+k -n banana exec deploy/static-client -c static-client -- curl localhost:1234 # should succeed
+k -n banana exec deploy/static-client -c static-client -- curl localhost:2345 # should return immediately with RBAC DENIED
 ```
 
 ##### w/ L7 Permissions
@@ -116,16 +140,18 @@ k delete po <static-server po> # we delete the pod to re-generate the envoy boot
 ### ProxyConfiguration w/ Namespaces
 
 ```bash
-k apply -f manifests/static-client.yaml
-k apply -f manifests/static-server/static-server-tcp.yaml
-k apply -f manifests/l4-traffic-permissions.yaml
+k create ns banana
+k -n banana apply -f manifests/static-client.yaml
+k create ns orange
+k -n orange apply -f manifests/static-server/static-server-http.yaml
+k -n orange apply -f manifests/l4-any-ns-traffic-permissions.yaml
 
-k apply -f manifests/proxyconfiguration-one.yaml # Observer changes to the Envoy config directly through the Envoy admin API
-k apply -f manifests/proxyconfiguration-two.yaml # No change as the oldest timestamp wins
+k -n orange apply -f manifests/proxyconfiguration-one.yaml # Observer changes to the Envoy config directly through the Envoy admin API
+k -n orange apply -f manifests/proxyconfiguration-two.yaml # No change as the oldest timestamp wins
 
-k delete -f manifests/proxyconfiguration-one.yaml # Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
+k -n orange delete -f manifests/proxyconfiguration-one.yaml # Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
 
-k delete po <static-server po> # we delete the pod to re-generate the envoy bootstrap config
+k -n orange delete po <static-server po> # we delete the pod to re-generate the envoy bootstrap config
 # Observe the values from proxyconfiguration-two.yaml are present in the Envoy config
 ```
 
