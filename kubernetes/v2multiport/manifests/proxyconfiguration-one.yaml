@@ -12,5 +12,5 @@ spec:
     # Only the web port should be enabled using the TPs
     localConnection:
       web:
-        connectTimeout: "123s"
+        connectTimeout: "123s" # This ALWAYS has to end in 's'. If you want ms, you need to use "0.123s"
         requestTimeout: "123s"
