@@ -12,6 +12,11 @@ node_name = "primary"
 ui_config {
   enabled = true
 }
+alt_domain = "testdomain"
 experiments = [
   "resource-apis"
+//   "v2dns"
+//   "v2tenancy"
 ]
+
+// recursors = ["8.8.8.8"]

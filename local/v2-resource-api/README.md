@@ -7,6 +7,14 @@ There is no `run.sh`, as this is intended to be used for free-form discovery.
 * A recent build of Consul
 * Buf CLI installed (if you run `make proto-tools` or some other proto-related target, it will be installed for you)
 
+## CLI Demo
+
+Useful commands:
+```bash
+consul resource list catalog.v2beta1.Workload
+consul resource list catalog.v2beta1.ServiceEndpoints // Check that the service matches workloads
+```
+
 ## gRPC Demo
 
 Run the agent
@@ -49,3 +57,6 @@ buf curl --insecure --schema ~/source/consul/proto-public --protocol grpc --http
 --data @resources/pod-workload.json \
 https://localhost:8503/hashicorp.consul.resource.ResourceService/Write
 ```
+
+## DNS Demo
+

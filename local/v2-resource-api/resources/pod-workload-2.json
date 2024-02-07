@@ -1,7 +1,7 @@
 {
     "resource": {
         "id": {
-            "name": "royco-waystar-75675f5897-11111",
+            "name": "royco-waystar-75675f5897-22222",
             "type": {
                 "group": "catalog", 
                 "group_version": "v2beta1", 
@@ -11,7 +11,7 @@
         "data": {
             "@type": "hashicorp.consul.catalog.v2beta1.Workload",
             "addresses": [
-                { "host": "10.0.0.1", "ports": ["public", "admin", "mesh"]}
+                { "host": "10.0.0.2", "ports": ["public", "admin", "mesh"]}
             ],
             "ports": {
                 "public": {
