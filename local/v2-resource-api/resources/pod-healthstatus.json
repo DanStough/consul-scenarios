@@ -9,8 +9,7 @@
             },
             "tenancy": {
                 "partition": "default", 
-                "namespace":"default",
-                "peerName": "local"
+                "namespace":"default"
             }
         },
         "owner": {
@@ -22,8 +21,7 @@
             },
             "tenancy": {
                 "partition": "default", 
-                "namespace":"default",
-                "peerName": "local"
+                "namespace":"default"
             }
         },
         "data": {

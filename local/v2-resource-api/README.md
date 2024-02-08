@@ -13,6 +13,7 @@ Useful commands:
 ```bash
 consul resource list catalog.v2beta1.Workload
 consul resource list catalog.v2beta1.ServiceEndpoints // Check that the service matches workloads
+consul resource apply -f resources/pod-workload.hcl
 ```
 
 ## gRPC Demo
