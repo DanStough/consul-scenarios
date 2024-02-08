@@ -61,3 +61,67 @@ https://localhost:8503/hashicorp.consul.resource.ResourceService/Write
 
 ## DNS Demo
 
+### A/AAAA Query
+```bash
+❯ dig @127.0.0.1 -p 8600 royco-waystar.service.consul
+
+; <<>> DiG 9.18.21 <<>> @127.0.0.1 -p 8600 royco-waystar.service.consul
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 15083
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0
+;; WARNING: recursion requested but not available
+
+;; QUESTION SECTION:
+;royco-waystar.service.consul.  IN      A
+
+;; ANSWER SECTION:
+royco-waystar.service.consul. 0 IN      A       10.0.0.1
+```
+
+### SRV Query
+```bash
+❯ dig @127.0.0.1 -p 8600 royco-waystar.service.consul SRV
+
+; <<>> DiG 9.18.21 <<>> @127.0.0.1 -p 8600 royco-waystar.service.consul SRV
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 285
+;; flags: qr aa rd; QUERY: 1, ANSWER: 2, AUTHORITY: 0, ADDITIONAL: 2
+;; WARNING: recursion requested but not available
+
+;; QUESTION SECTION:
+;royco-waystar.service.consul.  IN      SRV
+
+;; ANSWER SECTION:
+royco-waystar.service.consul. 0 IN      SRV     1 1 20000 mesh.port.royco-waystar-75675f5897-11111.workload.consul.
+royco-waystar.service.consul. 0 IN      SRV     1 1 80 public.port.royco-waystar-75675f5897-11111.workload.consul.
+
+;; ADDITIONAL SECTION:
+mesh.port.royco-waystar-75675f5897-11111.workload.consul. 0 IN A 10.0.0.1
+public.port.royco-waystar-75675f5897-11111.workload.consul. 0 IN A 10.0.0.1
+```
+
+### SRV Query + Port Name
+```bash
+❯ dig @127.0.0.1 -p 8600 mesh.port.royco-waystar.service.consul SRV
+
+; <<>> DiG 9.18.21 <<>> @127.0.0.1 -p 8600 mesh.port.royco-waystar.service.consul SRV
+; (1 server found)
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 50324
+;; flags: qr aa rd; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+;; WARNING: recursion requested but not available
+
+;; QUESTION SECTION:
+;mesh.port.royco-waystar.service.consul.        IN SRV
+
+;; ANSWER SECTION:
+mesh.port.royco-waystar.service.consul. 0 IN SRV 1 1 20000 mesh.port.royco-waystar-75675f5897-11111.workload.consul.
+
+;; ADDITIONAL SECTION:
+mesh.port.royco-waystar-75675f5897-11111.workload.consul. 0 IN A 10.0.0.1
+```
