@@ -1,0 +1,56 @@
+global:
+  name: consul
+  # image: hashicorp/consul-enterprise:1.15.11-ent
+  # imageK8S: hashicorp/consul-k8s-control-plane:1.1.13
+  # imageConsulDataplane: hashicorp/consul-dataplane:1.1.11
+  # enterpriseLicense:
+  #   secretName: license
+  #   secretKey: license.txt
+  #   enableLicenseAutoload: true
+  # enableConsulNamespaces: true
+  # NOT SUPPORTED IN 1.17
+  # adminPartitions:
+  #   enabled: true
+  #   name: "default"
+  # tls:
+  #   enabled: true
+
+  # acls:
+  #   manageSystemACLs: true
+    # bootstrapToken:
+    #   secretName: bootstrap-token
+    #   secretKey: token
+      
+  # gossipEncryption:
+  #   #autoGenerate: true
+  #   secretName: gossip
+  #   secretKey: key
+ui:
+  enabled: disabled
+server:
+  enabled: true
+  replicas: 1
+  logLevel: "trace"
+
+connectInject:
+  enabled: true
+  # replicas: 2
+  # consulNamespaces:
+  #   mirroringK8S: true
+  transparentProxy:
+    defaultEnabled: false
+    defaultOverwriteProbes: true
+  sidecarProxy:
+    defaultStartupFailureSeconds: 120
+    lifecycle:
+      defaultEnabled: true
+      defaultEnableShutdownDrainListeners: true
+      defaultShutdownGracePeriodSeconds: 30
+      defaultGracefulPort: 20600
+      defaultGracefulShutdownPath: /graceful_shutdown
+
+dns:
+  enabled: true
+  enableRedirection: true
+  type: ClusterIP
+  
